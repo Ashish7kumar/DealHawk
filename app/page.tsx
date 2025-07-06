@@ -1,9 +1,11 @@
 import React from 'react'
 import Image from 'next/image'
+import Searchbar from '@/components/Searchbar'
+import HeroCarousel from '@/components/HeroCarousel'
 const page = () => {
   return (
     <>
-    <section className="px-6 md:px-20 border-2 py-20 border-blue-500
+    <section className="px-6 md:px-20 py-24
     ">
     <div className='flex max-xl:flex-col gap-16'>
       <div className="flex flex-col justify-center">
@@ -16,16 +18,24 @@ const page = () => {
       
     </p>
     <h1 className="head-text">
-      Unleash the power of
-      <span className='text-primary'> DealHawk</span>
+      Unleash the power of&nbsp;
+      <span className='text-primary'>DealHawk</span>
     </h1>
        <p className="mt-6">
          Powerfull product that helps customers discover top-rated products at the lowest prices with intelligent, easy-to-use tools
        </p>
-       SearchBar
+       <Searchbar/>
       </div>
-      heroCarousel
+      <HeroCarousel/>
+
     </div>
+    </section>
+    <section className="trending-section">
+      <h2 className='section-text'>Tranding
+      </h2>
+      <div className='flex flex-wrap gap-x-8 gap-y-16'>
+
+      </div>
     </section>
     </>
   )
