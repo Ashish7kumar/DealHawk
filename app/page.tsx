@@ -17,7 +17,7 @@ const page = () => {
     </p>
     <h1 className="head-text">
       Unleash the power of
-      <span className='text-primary'>DealHawk</span>
+      <span className='text-primary'> DealHawk</span>
     </h1>
        <p className="mt-6">
          Powerfull product that helps customers discover top-rated products at the lowest prices with intelligent, easy-to-use tools
