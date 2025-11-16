@@ -1,18 +1,14 @@
 import type { Metadata } from "next";
-import { Inter,Space_Grotesk } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-const inter=Inter({
-  subsets:['latin']
-})
-const spaceGrotesk=Space_Grotesk({
-  subsets:['latin'],
-  weight:['300','400','500','600','700']
-})
+import {Navbar} from "./components/Navbar";
+import { Toaster } from 'sonner';
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "DealHawk",
-  description: "Save money by tracking product prices online. Get notified the moment prices drop with Deal Hawk.",
+  description: "DealHawk - Find the best deals and save money",
 };
 
 export default function RootLayout({
@@ -22,15 +18,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <link rel="shortcut icon" href='./favicon.ico'></link>
-      </head>
       <body className={inter.className}>
-        <main className="max-w-10xl mx-auto">
-          <Navbar/> 
+        <main>
+          <Navbar/>
+        <div className="max-w-10xl mx-auto">
         {children}
+        </div>
+        <Toaster />
         </main>
-      </body>
+        </body>
     </html>
   );
 }
