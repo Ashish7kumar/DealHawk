@@ -445,7 +445,9 @@ export async function googleProductSave(ProductGoogle: Product) {
   }
 }
 export async function googleShoppingResult(title: string) {
-  const ip = headers().get("x-forwarded-for");
+  const h = await headers();
+const ip = h.get("x-forwarded-for") || "";
+
   console.log(ip);
   const { success, pending, limit, reset, remaining } = await ratelimit.limit(
     ip!
@@ -481,7 +483,9 @@ export async function googleShoppingResult(title: string) {
 }
 
 export async function getGoogleresult(title: string) {
-  const ip = headers().get("x-forwarded-for");
+  const h = await headers();
+const ip = h.get("x-forwarded-for") || "";
+
   console.log(ip);
   const { success, pending, limit, reset, remaining } = await ratelimit.limit(
     ip!
@@ -528,6 +532,6 @@ export async function getGoogleresult(title: string) {
     return urlproduct;
   } catch (error: any) {
     console.error(`Error in getGoogleresult: ${error.message}`);
-    return null; // Return null on error instead of throwing
+    return null; 
   }
 }
