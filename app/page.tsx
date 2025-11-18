@@ -63,7 +63,7 @@ const Home = async () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-16 gap-y-24 py-8">
           {allProducts && allProducts.length > 0 ? (
-            allProducts.slice().reverse().map((product) => (
+            allProducts.slice().reverse().map((product:any) => (
               product._id && <ProductCard key={product._id} product={product} />
             ))
           ) : (
