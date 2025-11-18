@@ -7,12 +7,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Toaster, toast } from "sonner";
-
-type Props = {
-  params: { id: string };
-};
-
-const ProductDetails = async ({ params: { id } }: Props) => {
+async function ProductDetails({
+  params,
+}: {
+  params: { id: string }
+}) {
+  const { id } = params;
   const product: Product = await getProductById(id);
 
   if (!product) redirect("/");
