@@ -6,29 +6,26 @@ import { Product } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Toaster, toast } from "sonner";
-async function ProductDetails({
+
+export default async function ProductDetails({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
-  const { id } = params;
+  const { id } = await params;
+
   const product: Product = await getProductById(id);
 
   if (!product) redirect("/");
 
   const similarProducts = await getSimilarProducts(id);
-
-  // 🚀 Get enhanced price data from PriceHistoryApp using the stored slug
   const enhancedPriceData = await getEnhancedPriceData(product.geturl);
 
-  // Helper function to ensure price is valid and positive
   const getSafePrice = (price: number | undefined, fallback: number) => {
     if (!price || price <= 0) return fallback;
     return price;
   };
 
-  // Calculate safe prices
   const currentPrice = getSafePrice(
     enhancedPriceData?.currentPrice || product.currentPrice,
     product.originalPrice || 0
@@ -47,9 +44,9 @@ async function ProductDetails({
   );
 
   return (
-    <div className="flex  flex-col gap-16 flex-wrap px-6 md:px-20 py-32">
+    <div className="flex flex-col gap-16 flex-wrap px-6 md:px-20 py-32">
       <div className="flex gap-28 xl:flex-row flex-col">
-        <div className="flex-grow xl:max-w-[50%] max-w-full py-16  rounded-[17px]">
+        <div className="flex-grow xl:max-w-[50%] max-w-full py-16 rounded-[17px]">
           <Image
             src={product.image}
             alt={product.title}
@@ -96,7 +93,6 @@ async function ProductDetails({
                   width={20}
                   height={20}
                 />
-
                 <p className="text-base font-semibold text-[#D46F77]">
                   {product.reviewsCount}
                 </p>
@@ -206,10 +202,8 @@ async function ProductDetails({
               />
             </div>
 
-            {/* 🚀 Enhanced price insights */}
             {enhancedPriceData && (
               <div className="flex flex-col gap-4 mt-4">
-                {/* Buying Recommendation - Most Important */}
                 <div className="p-4 rounded-lg">
                   <h4 className="font-semibold text-gray-800 mb-2">
                     💡 Buying Recommendation
@@ -231,9 +225,7 @@ async function ProductDetails({
                   </p>
                 </div>
 
-                {/* Other insights */}
                 <div className="flex gap-5 flex-wrap">
-                  {/* Show if it's close to lowest price */}
                   {enhancedPriceData.currentPrice <=
                     enhancedPriceData.lowestPrice * 1.1 && (
                     <div className="bg-lime-100 px-4 py-2 rounded-lg">
@@ -244,7 +236,6 @@ async function ProductDetails({
                   )}
                 </div>
 
-                {/* Smart Insights Section */}
                 <div className="p-4 pt-0 rounded-lg">
                   <h5 className="font-semibold text-gray-800 mb-3">
                     🧠 Smart Insights
@@ -301,11 +292,7 @@ async function ProductDetails({
             )}
           </div>
 
-          <Link
-            href={product.url}
-            target="_blank"
-            className="w-fit"
-          >
+          <Link href={product.url} target="_blank" className="w-fit">
             <button className="py-4 px-4 bg-black hover:bg-opacity-70 rounded-[30px] text-white text-lg font-semibold">
               Buy Now
             </button>
@@ -313,22 +300,14 @@ async function ProductDetails({
         </div>
       </div>
 
-      {product.geturl ? ( // Check if graphUrl is not null and has a value
-        <div // Render a <div> element
+      {product.geturl && (
+        <div
           dangerouslySetInnerHTML={{
-            // Set the inner HTML of the <div> element
-            __html: `<iframe id="price_frame" src="https://pricehistoryapp.com/embed/${
-              // Define the HTML content as a string with embedded JavaScript variables
-              product.geturl // Extract the graph ID from the graphUrl
-            }" width="100%" height="500" frameborder="0" allowtransparency="true" scrolling="no"></iframe><script>const allLinks=document.querySelectorAll('a')  ; // Start of JavaScript code block
-allLinks.forEach(ele=>{ // Loop through all links found on the page
-  if(ele.href=='https://pricehistoryapp.com/?ref=embed'){ // Check if the link is the one to be hidden
-    ele.style.display='none' // Hide the link by setting its display style to 'none'
-  }
-})</script>`, // End of HTML content and JavaScript code block
+            __html: `<iframe id="price_frame" src="https://pricehistoryapp.com/embed/${product.geturl}" width="100%" height="500" frameborder="0" allowtransparency="true" scrolling="no"></iframe><script>const allLinks=document.querySelectorAll('a');allLinks.forEach(ele=>{if(ele.href=='https://pricehistoryapp.com/?ref=embed'){ele.style.display='none'}})</script>`,
           }}
         />
-      ) : null}
+      )}
+
       {similarProducts && similarProducts?.length > 0 && (
         <div className="py-14 flex flex-col gap-2 w-full">
           <p className="text-secondary text-[32px] font-semibold">
@@ -336,14 +315,14 @@ allLinks.forEach(ele=>{ // Loop through all links found on the page
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-16 gap-y-24 py-8 mt-7 w-full">
-            {similarProducts?.reverse().map((product: any) => (
-              <ProductCard key={product._id} product={product} />
-            ))}
+            {similarProducts
+              ?.reverse()
+              .map((product: any) => (
+                <ProductCard key={product._id} product={product} />
+              ))}
           </div>
         </div>
       )}
     </div>
   );
-};
-
-export default ProductDetails;
+}
