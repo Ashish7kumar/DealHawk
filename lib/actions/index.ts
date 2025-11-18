@@ -130,7 +130,9 @@ export async function getSimilarProducts(productId: string) {
 }
 
 export async function addUserEmailToProduct(productId: string, userEmail: string) {
-   const ip = headers().get("x-forwarded-for") ;
+   const h = await headers();
+const ip = h.get("x-forwarded-for") || "";
+
 console.log(ip);
 const { success, pending, limit, reset, remaining } = await ratelimit.limit(ip!);
 console.log(success, pending, limit, reset, remaining);
